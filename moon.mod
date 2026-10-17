@@ -9,7 +9,7 @@ preferred_target = "wasm"
 description = "Qiniu Kodo native protocol client for MoonBit"
 
 import {
-  "mldong/moon-hutool@0.1.4",
+  "mldong/moon-hutool@0.1.5",
   "moonbitlang/async@0.22.4",
 }
 
