@@ -1,0 +1,5 @@
+import {
+  "mldong/moon-kodo/error",
+}
+
+supported_targets = "wasm+native+js"

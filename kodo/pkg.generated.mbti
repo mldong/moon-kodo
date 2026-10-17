@@ -1,0 +1,230 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mldong/moon-kodo/kodo"
+
+import {
+  "mldong/moon-hutool/http",
+  "mldong/moon-kodo/auth",
+  "mldong/moon-kodo/config",
+  "mldong/moon-kodo/error",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn block_md5_hex(Bytes) -> String
+
+pub fn bool_segment(Bool) -> String
+
+pub fn change_mime_path(String, String, String) -> String
+
+pub fn check_block_size(Int, last~ : Bool) -> Unit raise @error.KodoError
+
+pub fn check_part_md5(Int, String, String) -> Unit raise @error.KodoError
+
+pub fn check_part_number(Int) -> Unit raise @error.KodoError
+
+pub fn complete_body(Array[PartInfo], filename? : String?, mime_type? : String?, custom_vars? : Array[(String, String)], meta? : Array[(String, String)]) -> String
+
+pub fn copy_path(String, String, String, String, Bool) -> String
+
+pub fn crc32_decimal(Bytes) -> String
+
+pub let default_block_size : Int
+
+pub fn default_mime() -> String
+
+pub fn encoded_entry(String, String?) -> String
+
+pub fn fetch_path(String, String, String) -> String
+
+pub fn form_body(FormPart, String) -> Bytes
+
+pub fn form_boundary(Bytes, String) -> String
+
+pub fn form_encode(String) -> String
+
+pub fn form_fields(String, Array[(String, String)]) -> Array[(String, String)]
+
+pub fn list_query(String, marker? : String?, prefix? : String?, delimiter? : String?, limit? : Int) -> String
+
+pub let max_block_size : Int
+
+pub let max_part_number : Int
+
+pub fn meta_form_fields(Array[(String, String)]) -> Array[(String, String)]
+
+pub let meta_prefix : String
+
+pub let min_block_size : Int
+
+pub fn move_path(String, String, String, String, Bool) -> String
+
+pub fn parse_uc_result(String) -> UcQueryResult raise @error.KodoError
+
+pub async fn query_region(&@http.Transport, String, String, uc_hosts? : Array[String]?) -> RegionProbe raise @error.KodoError
+
+pub fn region_from_probe(UcHostEntry, Array[String]) -> @config.Region
+
+pub fn replayable(@http.RequestBody) -> Bool
+
+pub fn sort_parts(Array[PartInfo]) -> Array[PartInfo]
+
+pub fn split_blocks(Int, Int) -> Array[(Int, Int)] raise @error.KodoError
+
+pub fn stat_user_metadata(String) -> Array[(String, String)]
+
+pub fn v2_key_segment(String) -> String
+
+// Errors
+
+// Types and methods
+pub struct Client {
+  transport : &@http.Transport
+  auth : @auth.Auth
+  config : @config.Config
+  bucket : String
+}
+pub async fn Client::abort_multipart(Self, UploadSession) -> Unit raise @error.KodoError
+pub async fn Client::begin_multipart(Self, String, expires? : Int64) -> UploadSession raise @error.KodoError
+pub fn Client::bucket(Self) -> String
+pub async fn Client::change_mime(Self, String, String) -> Unit raise @error.KodoError
+pub async fn Client::complete_multipart(Self, UploadSession, Array[PartInfo], mime_type? : String?, filename? : String?, custom_vars? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
+pub async fn Client::copy(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
+pub async fn Client::delete(Self, String) -> Bool raise @error.KodoError
+pub async fn Client::fetch(Self, String, String) -> FetchResult raise @error.KodoError
+pub async fn Client::list_files(Self, prefix? : String?, marker? : String?, delimiter? : String?, limit? : Int?) -> FileListing raise @error.KodoError
+pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int?, max_parts? : Int?) -> PartPage raise @error.KodoError
+pub async fn Client::move_object(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
+pub fn Client::new(&@http.Transport, @auth.Auth, @config.Config, String) -> Self raise @error.KodoError
+pub async fn Client::open_url(Self, String) -> @http.Response raise @error.KodoError
+pub fn Client::private_download_url(Self, String, expires? : Int64) -> String
+pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
+pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int, check_crc? : Bool, mime_type? : String?, expires? : Int64) -> FormUploadResult raise @error.KodoError
+pub fn Client::resume_multipart(Self, String, String, expires? : Int64) -> UploadSession raise @error.KodoError
+pub async fn Client::stat(Self, String) -> StatResult raise @error.KodoError
+pub async fn Client::upload_part(Self, UploadSession, Int, Bytes, check_crc? : Bool, expect_md5? : String?) -> PartResult raise @error.KodoError
+
+pub(all) struct FetchResult {
+  key : String?
+  hash : String?
+  fsize : Int64?
+  mime_type : String?
+  body : String
+}
+
+pub(all) struct FileInfo {
+  key : String
+  hash : String?
+  fsize : Int64?
+  mime_type : String?
+  put_time : Int64?
+  md5 : String?
+} derive(Eq)
+pub fn FileInfo::equal(Self, Self) -> Bool
+pub fn FileInfo::not_equal(Self, Self) -> Bool
+
+pub(all) struct FileListing {
+  items : Array[FileInfo]
+  common_prefixes : Array[String]
+  marker : String?
+  is_eof : Bool
+  body : String
+}
+
+pub(all) struct FormPart {
+  fields : Array[(String, String)]
+  file_name : String
+  file_type : String
+  data : Bytes
+}
+
+pub(all) struct FormUploadResult {
+  key : String?
+  hash : String?
+  body : String
+} derive(Eq)
+pub fn FormUploadResult::equal(Self, Self) -> Bool
+pub fn FormUploadResult::not_equal(Self, Self) -> Bool
+
+pub(all) struct PartInfo {
+  part_number : Int
+  etag : String
+  size : Int64?
+  put_time : Int64?
+}
+
+pub(all) struct PartPage {
+  parts : Array[PartInfo]
+  next_marker : Int?
+  truncated : Bool
+  body : String
+}
+
+pub(all) struct PartResult {
+  part_number : Int
+  etag : String
+  md5 : String?
+  body : String
+}
+
+pub(all) enum ProbeOutcome {
+  Found(UcQueryResult, String)
+  Refused(String)
+}
+
+pub(all) struct RegionProbe {
+  region : @config.Region
+  uc_host : String
+  ttl : Int64?
+}
+
+pub(all) struct StatResult {
+  fsize : Int64?
+  hash : String?
+  mime_type : String?
+  put_time : Int64?
+  user_metadata : Array[(String, String)]
+  body : String
+} derive(Eq)
+pub fn StatResult::equal(Self, Self) -> Bool
+pub fn StatResult::not_equal(Self, Self) -> Bool
+
+pub(all) struct UcGroup {
+  domains : Array[String]?
+  old : Array[String]?
+} derive(Eq, ToJson, @json.FromJson)
+pub fn UcGroup::equal(Self, Self) -> Bool
+pub fn UcGroup::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcGroup::not_equal(Self, Self) -> Bool
+pub fn UcGroup::to_json(Self) -> Json
+
+pub(all) struct UcHostEntry {
+  region : String
+  up : UcGroup?
+  io : UcGroup?
+  rs : UcGroup?
+  rsf : UcGroup?
+  api : UcGroup?
+} derive(Eq, ToJson, @json.FromJson)
+pub fn UcHostEntry::equal(Self, Self) -> Bool
+pub fn UcHostEntry::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcHostEntry::not_equal(Self, Self) -> Bool
+pub fn UcHostEntry::to_json(Self) -> Json
+
+pub(all) struct UcQueryResult {
+  hosts : Array[UcHostEntry]
+} derive(Eq, ToJson, @json.FromJson)
+pub fn UcQueryResult::equal(Self, Self) -> Bool
+pub fn UcQueryResult::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcQueryResult::not_equal(Self, Self) -> Bool
+pub fn UcQueryResult::to_json(Self) -> Json
+
+pub(all) struct UploadSession {
+  key : String
+  token : String
+  upload_id : String
+  expire_at : Int64?
+}
+
+// Type aliases
+
+// Traits

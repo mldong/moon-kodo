@@ -1,0 +1,66 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mldong/moon-kodo/auth"
+
+import {
+  "mldong/moon-hutool/http",
+  "mldong/moon-kodo/error",
+}
+
+// Values
+pub fn ascii_lower(String) -> String
+
+pub fn decode_upload_token(String) -> (String, String, String) raise @error.KodoError
+
+pub fn form_mime() -> String
+
+pub fn urlsafe_b64(Bytes) -> String
+
+pub fn urlsafe_b64_decode(String) -> Bytes raise @error.KodoError
+
+// Errors
+
+// Types and methods
+pub struct Auth {
+  access_key : String
+  secret_key : String
+}
+pub fn Auth::access_key(Self) -> String
+pub fn Auth::new(String, String) -> Self raise @error.KodoError
+pub fn Auth::private_download_url(Self, String, expires? : Int64) -> String
+pub fn Auth::private_download_url_with_deadline(Self, String, Int64) -> String
+pub fn Auth::qbox_authorization(Self, String, body? : Bytes?, content_type? : String?) -> @http.Header raise @error.KodoError
+pub fn Auth::qiniu_authorization(Self, String, String, body? : Bytes?, headers? : Array[@http.Header], timestamp? : TimestampSign?) -> Array[@http.Header] raise @error.KodoError
+pub fn Auth::sign(Self, String) -> String
+pub fn Auth::sign_bytes(Self, Bytes) -> String
+pub fn Auth::sign_qiniu_request(Self, String, String, body? : Bytes?, headers? : Array[@http.Header]) -> String raise @error.KodoError
+pub fn Auth::sign_request(Self, String, body? : Bytes?, content_type? : String?) -> String raise @error.KodoError
+pub fn Auth::sign_with_data(Self, String) -> String
+pub fn Auth::sign_with_data_bytes(Self, Bytes) -> String
+pub fn Auth::upload_token(Self, String, key? : String?, expires? : Int64, policy? : UploadPolicy?, strict? : Bool) -> String raise @error.KodoError
+pub fn Auth::upload_token_with_deadline(Self, String, Int64, key? : String?, policy? : UploadPolicy?, strict? : Bool) -> String raise @error.KodoError
+
+pub(all) struct PolicyField {
+  key : String
+  value : PolicyValue
+}
+
+pub(all) enum PolicyValue {
+  Text(String)
+  Count(Int64)
+  Flag(Bool)
+}
+
+pub(all) enum TimestampSign {
+  On(Int64)
+  Off
+}
+
+pub(all) struct UploadPolicy {
+  fields : Array[PolicyField]
+}
+pub fn UploadPolicy::new() -> Self
+pub fn UploadPolicy::put(Self, String, PolicyValue) -> Self
+
+// Type aliases
+
+// Traits

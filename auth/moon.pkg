@@ -1,0 +1,11 @@
+import {
+  "mldong/moon-kodo/error",
+  "mldong/moon-hutool/http" @transport,
+  "mldong/moon-hutool/codec",
+  "mldong/moon-hutool/date",
+  "mldong/moon-hutool/digest",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/string",
+}
+
+supported_targets = "wasm+native+js"

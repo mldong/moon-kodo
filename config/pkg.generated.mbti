@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mldong/moon-kodo/config"
+
+import {
+  "mldong/moon-kodo/error",
+}
+
+// Values
+pub fn default_uc_hosts() -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct Config {
+  region : Region
+  use_https : Bool
+  connect_timeout_ms : Int
+  read_timeout_ms : Int
+}
+pub fn Config::iovip_origin(Self) -> String
+pub fn Config::new(Region, use_https? : Bool, connect_timeout_ms? : Int, read_timeout_ms? : Int) -> Self
+pub fn Config::rs_origin(Self) -> String
+pub fn Config::rsf_origin(Self) -> String
+pub fn Config::scheme(Self) -> String
+pub fn Config::up_host(Self, accelerate? : Bool) -> String raise @error.KodoError
+pub fn Config::up_origin(Self, accelerate? : Bool) -> String raise @error.KodoError
+pub fn Config::with_region_id(String, use_https? : Bool, connect_timeout_ms? : Int, read_timeout_ms? : Int) -> Self?
+
+pub(all) struct Region {
+  region_id : String
+  src_up_hosts : Array[String]
+  acc_up_hosts : Array[String]
+  iovip_host : String
+  rs_host : String
+  rsf_host : String
+  api_host : String
+  uc_hosts : Array[String]
+}
+pub fn Region::with_region_id(String) -> Self?
+
+// Type aliases
+
+// Traits

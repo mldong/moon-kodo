@@ -1,0 +1,21 @@
+import {
+  "mldong/moon-kodo/error",
+  "mldong/moon-kodo/auth",
+  "mldong/moon-kodo/config",
+  "mldong/moon-hutool/http" @transport,
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/encoding/hex",
+  "moonbitlang/core/json",
+  "mldong/moon-hutool/digest",
+  "mldong/moon-hutool/hash",
+  "moonbitlang/async",
+}
+
+// 真链路用例（live_kodo_test.mbt）要能真发请求：moonhttp 适配层是唯一碰网络的那一层。
+import {
+  "moonbitlang/async/io",
+  "moonbitlang/core/env",
+  "mldong/moon-hutool/date",
+} for "test"
+
+supported_targets = "wasm+native"
