@@ -229,14 +229,33 @@ pub async fn query_region(
 }
 
 ///|
+/// 问号之后一律隐去。传输层的 `InvalidRequest` 有几档会把整条 URL 原样写进文案
+/// （hutool 的 `split_url`：`url 缺 :// 分隔`、`url 带 fragment`、`url 缺 authority`、
+/// `pathless query` 四档都带），而这类 URL 的 query **就是凭据本体**——私有下载 URL 是
+/// `?e=<到期时刻>&token=<ak>:<签名>`，本文件的 UC 探测更直接把 `?ak=<access key>` 挂在串上；
+/// 落进日志等于把这条授权又发出去一份。主机与路径留着：诊断要看的是"哪一发"，不是那把钥匙。
+/// `Network` 那一档本来只到源站（`建连失败（scheme://authority）：…`），一并走这条
+/// 是因为它没有代价；`InvalidResponse` 的文案由底座透上来，形状不由本库保证，同样隐去。
+fn redact_query(text : String) -> String {
+  match text.find("?") {
+    None => text
+    Some(at) => text[0:at].to_owned() + "?<redacted>"
+  }
+}
+
+///|
+/// 传输层文案交给调用方的两个出口之一（另一个是 `client.mbt` 的 `transport_failure`）：
+/// 本文件的 `try_one_uc`、`client.mbt` 的 `send`（重试注记那一句，它是要 println 的）与
+/// `read_all` 三个 catch 点都走这里；新加 catch 点时别再手写 `"network: " + detail`。
 fn transport_text(err : @transport.TransportError) -> String {
   match err {
-    @transport.TransportError::Network(detail) => "network: " + detail
+    @transport.TransportError::Network(detail) =>
+      "network: " + redact_query(detail)
     @transport.TransportError::Timeout => "timeout"
     @transport.TransportError::InvalidRequest(detail) =>
-      "invalid request: " + detail
+      "invalid request: " + redact_query(detail)
     @transport.TransportError::InvalidResponse(detail) =>
-      "invalid response: " + detail
+      "invalid response: " + redact_query(detail)
   }
 }
 

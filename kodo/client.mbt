@@ -93,12 +93,18 @@ fn is_no_answer(error : @transport.TransportError) -> Bool {
 }
 
 ///|
+/// 传输失败落进哪一臂是伪码的事，文案本身先过 `redact_query`：这是传输层文案交给调用方的
+/// **第二个**出口（第一个是 `region_probe.mbt` 的 `transport_text`），而预签名/私有下载 URL
+/// 的 query 就是凭据本体——只隐去一处等于另一处照旧外流。理由与隐去形状见那一条注释。
 fn transport_failure(error : @transport.TransportError) -> @error.KodoError {
   match error {
-    @transport.TransportError::Network(detail) => @error.Network(detail)
+    @transport.TransportError::Network(detail) =>
+      @error.Network(redact_query(detail))
     @transport.TransportError::Timeout => @error.Network("timeout")
-    @transport.TransportError::InvalidRequest(detail) => @error.BadParam(detail)
-    @transport.TransportError::InvalidResponse(detail) => @error.Network(detail)
+    @transport.TransportError::InvalidRequest(detail) =>
+      @error.BadParam(redact_query(detail))
+    @transport.TransportError::InvalidResponse(detail) =>
+      @error.Network(redact_query(detail))
   }
 }
 

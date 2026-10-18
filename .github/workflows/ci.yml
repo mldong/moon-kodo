@@ -33,7 +33,7 @@ jobs:
     name: Check / Build / Test (wasm + native, live Kodo bucket)
     runs-on: ubuntu-latest
     env:
-      EXPECTED_TESTS: "62"
+      EXPECTED_TESTS: "64"
     steps:
       - uses: actions/checkout@v4
 
