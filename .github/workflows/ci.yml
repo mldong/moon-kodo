@@ -205,5 +205,5 @@ jobs:
             a=$((a + 1)); moon update >/dev/null 2>&1 || true; sleep 20
           done
           echo "consumer leg 安装所用尝试次数：$a / 3" >> "$GITHUB_STEP_SUMMARY"
-          echo "注册表解析到的 pin：$(sed -nE 's/.*"(mldong\/moon-kodo@[^"]+)".*/\1/p' moon.mod)"
+          echo "注册表解析到的 pin：$(grep -o 'moon-kodo@[0-9.]*' moon.mod | head -1)"
           moon test --target wasm --no-render
