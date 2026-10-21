@@ -16,11 +16,11 @@ pub fn bool_segment(Bool) -> String
 
 pub fn change_mime_path(String, String, String) -> String
 
-pub fn check_block_size(Int, last~ : Bool) -> Unit raise @error.KodoError
+pub fn check_block_size(Int32, last~ : Bool) -> Unit raise @error.KodoError
 
-pub fn check_part_md5(Int, String, String) -> Unit raise @error.KodoError
+pub fn check_part_md5(Int32, String, String) -> Unit raise @error.KodoError
 
-pub fn check_part_number(Int) -> Unit raise @error.KodoError
+pub fn check_part_number(Int32) -> Unit raise @error.KodoError
 
 pub fn complete_body(Array[PartInfo], filename? : String?, mime_type? : String?, custom_vars? : Array[(String, String)], meta? : Array[(String, String)]) -> String
 
@@ -28,7 +28,7 @@ pub fn copy_path(String, String, String, String, Bool) -> String
 
 pub fn crc32_decimal(Bytes) -> String
 
-pub let default_block_size : Int
+pub let default_block_size : Int32
 
 pub fn default_mime() -> String
 
@@ -44,17 +44,17 @@ pub fn form_encode(String) -> String
 
 pub fn form_fields(String, Array[(String, String)]) -> Array[(String, String)]
 
-pub fn list_query(String, marker? : String?, prefix? : String?, delimiter? : String?, limit? : Int) -> String
+pub fn list_query(String, marker? : String?, prefix? : String?, delimiter? : String?, limit? : Int32) -> String
 
-pub let max_block_size : Int
+pub let max_block_size : Int32
 
-pub let max_part_number : Int
+pub let max_part_number : Int32
 
 pub fn meta_form_fields(Array[(String, String)]) -> Array[(String, String)]
 
 pub let meta_prefix : String
 
-pub let min_block_size : Int
+pub let min_block_size : Int32
 
 pub fn move_path(String, String, String, String, Bool) -> String
 
@@ -68,7 +68,7 @@ pub fn replayable(@http.RequestBody) -> Bool
 
 pub fn sort_parts(Array[PartInfo]) -> Array[PartInfo]
 
-pub fn split_blocks(Int, Int) -> Array[(Int, Int)] raise @error.KodoError
+pub fn split_blocks(Int32, Int32) -> Array[(Int32, Int32)] raise @error.KodoError
 
 pub fn stat_user_metadata(String) -> Array[(String, String)]
 
@@ -91,17 +91,17 @@ pub async fn Client::complete_multipart(Self, UploadSession, Array[PartInfo], mi
 pub async fn Client::copy(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
 pub async fn Client::delete(Self, String) -> Bool raise @error.KodoError
 pub async fn Client::fetch(Self, String, String) -> FetchResult raise @error.KodoError
-pub async fn Client::list_files(Self, prefix? : String?, marker? : String?, delimiter? : String?, limit? : Int?) -> FileListing raise @error.KodoError
-pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int?, max_parts? : Int?) -> PartPage raise @error.KodoError
+pub async fn Client::list_files(Self, prefix? : String?, marker? : String?, delimiter? : String?, limit? : Int32?) -> FileListing raise @error.KodoError
+pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int32?, max_parts? : Int32?) -> PartPage raise @error.KodoError
 pub async fn Client::move_object(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
 pub fn Client::new(&@http.Transport, @auth.Auth, @config.Config, String) -> Self raise @error.KodoError
 pub async fn Client::open_url(Self, String) -> @http.Response raise @error.KodoError
 pub fn Client::private_download_url(Self, String, expires? : Int64) -> String
 pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
-pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int, check_crc? : Bool, mime_type? : String?, expires? : Int64) -> FormUploadResult raise @error.KodoError
+pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64) -> FormUploadResult raise @error.KodoError
 pub fn Client::resume_multipart(Self, String, String, expires? : Int64) -> UploadSession raise @error.KodoError
 pub async fn Client::stat(Self, String) -> StatResult raise @error.KodoError
-pub async fn Client::upload_part(Self, UploadSession, Int, Bytes, check_crc? : Bool, expect_md5? : String?) -> PartResult raise @error.KodoError
+pub async fn Client::upload_part(Self, UploadSession, Int32, Bytes, check_crc? : Bool, expect_md5? : String?) -> PartResult raise @error.KodoError
 
 pub(all) struct FetchResult {
   key : String?
@@ -146,7 +146,7 @@ pub fn FormUploadResult::equal(Self, Self) -> Bool
 pub fn FormUploadResult::not_equal(Self, Self) -> Bool
 
 pub(all) struct PartInfo {
-  part_number : Int
+  part_number : Int32
   etag : String
   size : Int64?
   put_time : Int64?
@@ -154,13 +154,13 @@ pub(all) struct PartInfo {
 
 pub(all) struct PartPage {
   parts : Array[PartInfo]
-  next_marker : Int?
+  next_marker : Int32?
   truncated : Bool
   body : String
 }
 
 pub(all) struct PartResult {
-  part_number : Int
+  part_number : Int32
   etag : String
   md5 : String?
   body : String

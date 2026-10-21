@@ -18,7 +18,7 @@ pub fn json_string_field(String, String) -> String?
 
 pub fn json_string_pairs(String) -> Array[(String, String)]
 
-pub fn service_error(Int, String, String?) -> ServiceError
+pub fn service_error(Int32, String, String?) -> ServiceError
 
 // Errors
 pub(all) suberror KodoError {
@@ -32,12 +32,12 @@ pub(all) suberror KodoError {
 pub fn KodoError::equal(Self, Self) -> Bool
 pub fn KodoError::is_not_found(Self) -> Bool
 pub fn KodoError::not_equal(Self, Self) -> Bool
-pub fn KodoError::pseudo_code(Self) -> Int?
+pub fn KodoError::pseudo_code(Self) -> Int32?
 pub fn KodoError::text(Self) -> String
 
 // Types and methods
 pub(all) struct ServiceError {
-  status : Int
+  status : Int32
   error : String
   req_id : String?
 } derive(Eq)
