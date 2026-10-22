@@ -35,7 +35,7 @@ jobs:
     env:
       # 10-22 夜从 64 抬到 86：batch、chstatus/chtype/deleteAfterDays/restoreAr、buckets、domains、qetag、桶配置的离线件，
       # 以及 batch/资源管理/buckets/qetag/domains/桶配置读六条新 live 腿。
-      EXPECTED_TESTS: "86"
+      EXPECTED_TESTS: "88"
     steps:
       - uses: actions/checkout@v4
 
