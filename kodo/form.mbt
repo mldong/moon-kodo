@@ -149,11 +149,17 @@ pub async fn Client::put_bytes(
   expires~ : Int64 = 3600,
   extra_fields~ : Array[(String, String)] = [],
   meta~ : Array[(String, String)] = [],
+  policy~ : @auth.UploadPolicy? = None,
 ) -> FormUploadResult raise @error.KodoError {
   if key.is_empty() {
     raise @error.BadParam("form upload needs a key")
   }
-  let token = self.auth.upload_token(self.bucket, key=Some(key), expires~)
+  let token = self.auth.upload_token(
+    self.bucket,
+    key=Some(key),
+    expires~,
+    policy~,
+  )
   let rest : Array[(String, String)] = [("key", key)]
   if check_crc {
     rest.push(("crc32", crc32_decimal(data)))

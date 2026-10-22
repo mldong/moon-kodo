@@ -64,6 +64,46 @@ pub fn json_objects(body : String, key : String) -> Array[String] {
 }
 
 ///|
+/// 顶层就是字符串数组的那一档（Kodo `buckets` 的响应）：逐个取顶层字符串。
+pub fn json_array_strings(body : String) -> Array[String] {
+  let out : Array[String] = []
+  let texts = body.to_array()
+  match find_index_of(texts, "[") {
+    None => ()
+    Some(at) => {
+      let mut i = at + 1
+      while i < texts.length() {
+        if texts[i] == '"' {
+          let read = read_string_pair(texts, i)
+          out.push(read.0)
+          i = read.1
+        } else if texts[i] == ']' {
+          i = texts.length()
+        } else {
+          i = i + 1
+        }
+      }
+    }
+  }
+  out
+}
+
+///|
+/// 顶层就是对象数组的那一档（Kodo `POST /batch` 的响应）：从第一个 `[` 起收每个
+/// 顶层 `{...}`。`json_objects` 要求先有键名，batch 没有键名，所以单独开这一口。
+pub fn json_array_objects(body : String) -> Array[String] {
+  let out : Array[String] = []
+  let texts = body.to_array()
+  match find_index_of(texts, "[") {
+    None => out
+    Some(at) => {
+      collect_objects(texts, at + 1, out)
+      out
+    }
+  }
+}
+
+///|
 /// 取一个**字符串**数组：`key` 指向的 `[ "a", "b" ]`。列举回包的
 /// `commonPrefixes` 就走这一档（对象数组那一族走 `json_objects`）。
 /// 串里的转义照 `json_unescape` 解；`]` 只在串外才算收尾。

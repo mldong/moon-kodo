@@ -26,6 +26,8 @@ pub fn complete_body(Array[PartInfo], filename? : String?, mime_type? : String?,
 
 pub fn copy_path(String, String, String, String, Bool) -> String
 
+pub fn cors_rules_json(Array[CorsRule]) -> String
+
 pub fn crc32_decimal(Bytes) -> String
 
 pub let default_block_size : Int32
@@ -44,6 +46,8 @@ pub fn form_encode(String) -> String
 
 pub fn form_fields(String, Array[(String, String)]) -> Array[(String, String)]
 
+pub fn lifecycle_rule_query(LifecycleRule) -> String
+
 pub fn list_query(String, marker? : String?, prefix? : String?, delimiter? : String?, limit? : Int32) -> String
 
 pub let max_block_size : Int32
@@ -59,6 +63,8 @@ pub let min_block_size : Int32
 pub fn move_path(String, String, String, String, Bool) -> String
 
 pub fn parse_uc_result(String) -> UcQueryResult raise @error.KodoError
+
+pub fn qetag(Bytes) -> String
 
 pub async fn query_region(&@http.Transport, String, String, uc_hosts? : Array[String]?) -> RegionProbe raise @error.KodoError
 
@@ -77,6 +83,76 @@ pub fn v2_key_segment(String) -> String
 // Errors
 
 // Types and methods
+pub(all) struct BatchCopy {
+  from_bucket : String?
+  from_key : String
+  to_bucket : String?
+  to_key : String
+  force : Bool
+}
+
+pub(all) struct BatchItem {
+  code : Int64?
+  error : String?
+  body : String
+}
+
+pub(all) struct BatchMove {
+  from_bucket : String?
+  from_key : String
+  to_bucket : String?
+  to_key : String
+  force : Bool
+}
+
+pub(all) enum BatchOp {
+  Delete(String)
+  Stat(String)
+  Copy(BatchCopy)
+  Move(BatchMove)
+  ChangeMime(String, String)
+  ChangeType(String, StorageType)
+  ChangeStatus(String, ObjectStatus)
+  DeleteAfterDays(String, Int32)
+  RestoreArchive(String, Int32)
+}
+
+pub(all) struct BatchResult {
+  items : Array[BatchItem]
+  body : String
+}
+
+pub(all) struct BucketDomains {
+  names : Array[String]
+  body : String
+}
+
+pub(all) struct BucketInfo {
+  body : String
+  zone : String?
+  region : String?
+  private_flag : Int64?
+  protected_flag : Int64?
+  max_age : Int64?
+  no_index_page : Int64?
+  global : Bool?
+  anti_leech_mode : Int64?
+  no_refer : Bool?
+  refer_white : Array[String]
+  refer_black : Array[String]
+}
+
+pub(all) struct BucketList {
+  names : Array[String]
+  body : String
+}
+
+pub(all) struct BucketQuota {
+  size : Int64?
+  count : Int64?
+  body : String
+}
+
 pub struct Client {
   transport : &@http.Transport
   auth : @auth.Auth
@@ -84,24 +160,73 @@ pub struct Client {
   bucket : String
 }
 pub async fn Client::abort_multipart(Self, UploadSession) -> Unit raise @error.KodoError
-pub async fn Client::begin_multipart(Self, String, expires? : Int64) -> UploadSession raise @error.KodoError
+pub async fn Client::add_lifecycle_rule(Self, LifecycleRule, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::batch(Self, Array[BatchOp]) -> BatchResult raise @error.KodoError
+pub async fn Client::begin_multipart(Self, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
 pub fn Client::bucket(Self) -> String
+pub async fn Client::bucket_info(Self, bucket? : String?) -> BucketInfo raise @error.KodoError
+pub async fn Client::bucket_quota(Self, bucket? : String?) -> BucketQuota raise @error.KodoError
+pub async fn Client::buckets(Self) -> BucketList raise @error.KodoError
 pub async fn Client::change_mime(Self, String, String) -> Unit raise @error.KodoError
+pub async fn Client::change_status(Self, String, ObjectStatus) -> Unit raise @error.KodoError
+pub async fn Client::change_type(Self, String, StorageType) -> Unit raise @error.KodoError
 pub async fn Client::complete_multipart(Self, UploadSession, Array[PartInfo], mime_type? : String?, filename? : String?, custom_vars? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
 pub async fn Client::copy(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
+pub async fn Client::cors_rules(Self, bucket? : String?) -> CorsRules raise @error.KodoError
+pub async fn Client::create_bucket(Self, String, String) -> Unit raise @error.KodoError
 pub async fn Client::delete(Self, String) -> Bool raise @error.KodoError
+pub async fn Client::delete_after_days(Self, String, Int32) -> Unit raise @error.KodoError
+pub async fn Client::delete_bucket(Self, String) -> Unit raise @error.KodoError
+pub async fn Client::delete_lifecycle_rule(Self, String, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::domains(Self, bucket? : String?) -> BucketDomains raise @error.KodoError
+pub async fn Client::event_rules(Self, bucket? : String?) -> EventRules raise @error.KodoError
 pub async fn Client::fetch(Self, String, String) -> FetchResult raise @error.KodoError
+pub async fn Client::lifecycle_rules(Self, bucket? : String?) -> LifecycleRules raise @error.KodoError
 pub async fn Client::list_files(Self, prefix? : String?, marker? : String?, delimiter? : String?, limit? : Int32?) -> FileListing raise @error.KodoError
 pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int32?, max_parts? : Int32?) -> PartPage raise @error.KodoError
 pub async fn Client::move_object(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
 pub fn Client::new(&@http.Transport, @auth.Auth, @config.Config, String) -> Self raise @error.KodoError
 pub async fn Client::open_url(Self, String) -> @http.Response raise @error.KodoError
 pub fn Client::private_download_url(Self, String, expires? : Int64) -> String
-pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
-pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64) -> FormUploadResult raise @error.KodoError
-pub fn Client::resume_multipart(Self, String, String, expires? : Int64) -> UploadSession raise @error.KodoError
+pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)], policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
+pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64, policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
+pub async fn Client::restore_archive(Self, String, Int32) -> Unit raise @error.KodoError
+pub fn Client::resume_multipart(Self, String, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
+pub async fn Client::set_bucket_quota(Self, Int64, Int64, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_cors_rules(Self, Array[CorsRule], bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::stat(Self, String) -> StatResult raise @error.KodoError
+pub async fn Client::update_lifecycle_rule(Self, LifecycleRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::upload_part(Self, UploadSession, Int32, Bytes, check_crc? : Bool, expect_md5? : String?) -> PartResult raise @error.KodoError
+
+pub(all) struct CorsRule {
+  allowed_origins : Array[String]
+  allowed_methods : Array[String]
+  allowed_headers : Array[String]
+  exposed_headers : Array[String]
+  max_age : Int64
+}
+pub fn CorsRule::new(Array[String], Array[String]) -> Self
+pub fn CorsRule::with_extra(Self, allowed_headers? : Array[String], exposed_headers? : Array[String], max_age? : Int64) -> Self
+
+pub(all) struct CorsRules {
+  rules : Array[CorsRule]
+  body : String
+}
+
+pub(all) struct EventRule {
+  name : String
+  prefix : String
+  suffix : String
+  events : Array[String]
+  callback_urls : Array[String]
+  access_key : String
+  host : String
+}
+
+pub(all) struct EventRules {
+  rules : Array[EventRule]
+  body : String
+}
 
 pub(all) struct FetchResult {
   key : String?
@@ -145,6 +270,28 @@ pub(all) struct FormUploadResult {
 pub fn FormUploadResult::equal(Self, Self) -> Bool
 pub fn FormUploadResult::not_equal(Self, Self) -> Bool
 
+pub(all) struct LifecycleRule {
+  name : String
+  prefix : String
+  delete_after_days : Int64
+  to_line_after_days : Int64
+  to_archive_ir_after_days : Int64
+  to_archive_after_days : Int64
+  to_deep_archive_after_days : Int64
+}
+pub fn LifecycleRule::new(String, prefix? : String) -> Self
+
+pub(all) struct LifecycleRules {
+  rules : Array[LifecycleRule]
+  body : String
+}
+
+pub(all) enum ObjectStatus {
+  Enabled
+  Disabled
+}
+pub fn ObjectStatus::code(Self) -> Int32
+
 pub(all) struct PartInfo {
   part_number : Int32
   etag : String
@@ -187,6 +334,16 @@ pub(all) struct StatResult {
 } derive(Eq)
 pub fn StatResult::equal(Self, Self) -> Bool
 pub fn StatResult::not_equal(Self, Self) -> Bool
+
+pub(all) enum StorageType {
+  Common
+  Infrequency
+  Archive
+  DeepArchive
+  ArchiveIR
+  IntelligentTiering
+}
+pub fn StorageType::code(Self) -> Int32
 
 pub(all) struct UcGroup {
   domains : Array[String]?

@@ -2,6 +2,10 @@
 package "mldong/moon-kodo/error"
 
 // Values
+pub fn json_array_objects(String) -> Array[String]
+
+pub fn json_array_strings(String) -> Array[String]
+
 pub fn json_bool_field(String, String) -> Bool?
 
 pub fn json_int_field(String, String) -> Int64?

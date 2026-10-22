@@ -45,6 +45,16 @@ pub fn Config::scheme(self : Config) -> String {
 }
 
 ///|
+/// UC 管理的 origin。官方 `BucketManager` 的桶管理接口走 `configHelper.ucHost()`，
+/// 探测表的第一台就是它；列表为空属于配置错误，在任何请求之前拒。
+pub fn Config::uc_origin(self : Config) -> String raise @error.KodoError {
+  if self.region.uc_hosts.is_empty() {
+    raise @error.BadParam("region has no UC host")
+  }
+  self.scheme() + "://" + self.region.uc_hosts[0]
+}
+
+///|
 /// 上传主机。默认走加速组（官方表单/分块上传的常用档），源站留着给内网场景显式点名。
 /// 空表在**使用任何请求之前**就拒掉——区域表是配出来的，配错了要立刻听见。
 pub fn Config::up_host(

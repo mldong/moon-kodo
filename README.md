@@ -65,8 +65,9 @@ moon add mldong/moon-kodo
 
 ## 开发进度
 
-排法按存储侧那条端口（18 法）需要什么。**已实现**＝有公开件且真桶跑过；**待开发**＝这条线在公开面
-里零命中；**不适用**＝协议里没有这一族，不是还没做。
+排法按存储侧那条端口（18 法）需要什么。**已实现**＝有公开件且真桶跑过；
+**部分实现**＝子集真桶跑过，其余只有离线件；**待开发**＝这条线在公开面里零命中；
+**不适用**＝协议里没有这一族，不是还没做。
 
 | 存储侧要的那一格 | 本 SDK 的件 | 状态 |
 |---|---|---|
@@ -74,19 +75,28 @@ moon add mldong/moon-kodo
 | 手动分片五步（第二代 `/blocks`） | 六个件，见下注 | 已实现 |
 | 存在 / 取回 / 删除 | `stat` `open_url` `delete` | 已实现 |
 | 同平台复制 / 移动 | `copy` `move_object` | 已实现 |
-| 单层列举 | `list_files`（`rsf` 的 `/v2/list`） | 已实现 |
+| 单层列举 | `list_files`（`rsf` 的 `/list`；官方已把 `/v2/list` 标废弃） | 已实现 |
 | 预签名下载 | `Auth::private_download_url`（官方只签 GET） | 已实现 |
 | 前端直传的凭据 | `Auth::upload_token`——PUT 那一格由令牌承担，不是预签名 URL | 不适用 |
 | 用户元数据 | `stat_user_metadata` ＋ `change_mime` | 已实现 |
 | 端点与区域 | `query_region` `region_from_probe` | 已实现 |
 | 对象级 canned ACL | Kodo 协议无这一族 | 不适用 |
+| 批量操作 | `batch`（delete/stat/copy/move/chgm/chtype/chstatus/deleteAfterDays/restoreAr） | 已实现 |
+| 资源管理 | `change_status` `change_type` `delete_after_days` `restore_archive` | 部分实现（解冻仅离线） |
+| 内容哈希 | `qetag`（自由函数） | 已实现 |
+| 桶管理 | `buckets` `create_bucket` `delete_bucket` | 部分实现（建/删未跑真桶） |
+| 域名列表 | `domains` | 已实现 |
+| 桶配置读 | `bucket_info` `cors_rules` `lifecycle_rules` `bucket_quota` `event_rules` | 已实现 |
+| 桶配置写 | `set_cors_rules` `set_bucket_quota` `add/update/delete_lifecycle_rule` | 部分实现（只有离线件） |
 | 分块上传第一代（`mkfile`） | 无对应件 | 待开发 |
 | `fetch` 拉取的任务态轮询 | 有 `fetch_path` 请求件，无 pfop/jobctrl 那一圈 | 待开发 |
-| 建桶 / 删桶 / 桶配置 | 刻意不做，那是控制台的事 | 不适用 |
+| 图片样式／原图保护／referer | 无对应件 | 待开发 |
 
 分片那一族的六个件：`begin_multipart`、`upload_part`、`list_parts`、`complete_multipart`、
 `abort_multipart`，另加 `resume_multipart`——续传是拿既有 `uploadId` 重新组一个会话（上传令牌按 key
 现签），不重开分块。
+
+完整对标台账（官方基线、P0–P3、逐项证据）：[PARITY.md](PARITY.md)。
 
 ## 它服务于谁
 

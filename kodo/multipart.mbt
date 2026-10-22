@@ -295,11 +295,17 @@ pub async fn Client::begin_multipart(
   self : Client,
   key : String,
   expires~ : Int64 = 3600,
+  policy~ : @auth.UploadPolicy? = None,
 ) -> UploadSession raise @error.KodoError {
   if key.is_empty() {
     raise @error.BadParam("multipart upload needs a key")
   }
-  let token = self.auth.upload_token(self.bucket, key=Some(key), expires~)
+  let token = self.auth.upload_token(
+    self.bucket,
+    key=Some(key),
+    expires~,
+    policy~,
+  )
   let url = self.v2_url(key)
   let response = self.v2_send(@transport.Method::Post, url, token)
   let text = read_text(response.body)
@@ -325,6 +331,7 @@ pub fn Client::resume_multipart(
   key : String,
   upload_id : String,
   expires~ : Int64 = 3600,
+  policy~ : @auth.UploadPolicy? = None,
 ) -> UploadSession raise @error.KodoError {
   if key.is_empty() {
     raise @error.BadParam("multipart session needs a key")
@@ -334,7 +341,7 @@ pub fn Client::resume_multipart(
   }
   UploadSession::{
     key,
-    token: self.auth.upload_token(self.bucket, key=Some(key), expires~),
+    token: self.auth.upload_token(self.bucket, key=Some(key), expires~, policy~),
     upload_id,
     expire_at: None,
   }
@@ -500,8 +507,9 @@ pub async fn Client::put_bytes_multipart(
   check_crc~ : Bool = false,
   mime_type~ : String? = None,
   expires~ : Int64 = 3600,
+  policy~ : @auth.UploadPolicy? = None,
 ) -> FormUploadResult raise @error.KodoError {
-  let session = self.begin_multipart(key, expires~)
+  let session = self.begin_multipart(key, expires~, policy~)
   let ranges = split_blocks(data.length(), block_size)
   let parts : Array[PartInfo] = []
   for index in 0..<ranges.length() {
