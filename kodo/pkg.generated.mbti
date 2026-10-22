@@ -36,6 +36,8 @@ pub fn default_mime() -> String
 
 pub fn encoded_entry(String, String?) -> String
 
+pub fn event_rule_query(EventRule) -> String
+
 pub fn fetch_path(String, String, String) -> String
 
 pub fn form_body(FormPart, String) -> Bytes
@@ -45,6 +47,8 @@ pub fn form_boundary(Bytes, String) -> String
 pub fn form_encode(String) -> String
 
 pub fn form_fields(String, Array[(String, String)]) -> Array[(String, String)]
+
+pub fn image_path(String, String, String) -> String
 
 pub fn lifecycle_rule_query(LifecycleRule) -> String
 
@@ -160,6 +164,7 @@ pub struct Client {
   bucket : String
 }
 pub async fn Client::abort_multipart(Self, UploadSession) -> Unit raise @error.KodoError
+pub async fn Client::add_event_rule(Self, EventRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::add_lifecycle_rule(Self, LifecycleRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::batch(Self, Array[BatchOp]) -> BatchResult raise @error.KodoError
 pub async fn Client::begin_multipart(Self, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
@@ -177,6 +182,7 @@ pub async fn Client::create_bucket(Self, String, String) -> Unit raise @error.Ko
 pub async fn Client::delete(Self, String) -> Bool raise @error.KodoError
 pub async fn Client::delete_after_days(Self, String, Int32) -> Unit raise @error.KodoError
 pub async fn Client::delete_bucket(Self, String) -> Unit raise @error.KodoError
+pub async fn Client::delete_event_rule(Self, String, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::delete_lifecycle_rule(Self, String, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::domains(Self, bucket? : String?) -> BucketDomains raise @error.KodoError
 pub async fn Client::event_rules(Self, bucket? : String?) -> EventRules raise @error.KodoError
@@ -192,9 +198,17 @@ pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? :
 pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64, policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
 pub async fn Client::restore_archive(Self, String, Int32) -> Unit raise @error.KodoError
 pub fn Client::resume_multipart(Self, String, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
+pub async fn Client::set_bucket_access_style(Self, Bool, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_bucket_image(Self, String, host? : String, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_bucket_max_age(Self, Int64, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_bucket_private(Self, Bool, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::set_bucket_quota(Self, Int64, Int64, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::set_cors_rules(Self, Array[CorsRule], bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_index_page(Self, Bool, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::set_refer_anti_leech(Self, Int32, pattern? : String, allow_empty_referer? : Bool, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::stat(Self, String) -> StatResult raise @error.KodoError
+pub async fn Client::unset_bucket_image(Self, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::update_event_rule(Self, EventRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::update_lifecycle_rule(Self, LifecycleRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::upload_part(Self, UploadSession, Int32, Bytes, check_crc? : Bool, expect_md5? : String?) -> PartResult raise @error.KodoError
 

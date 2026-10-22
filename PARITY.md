@@ -2,8 +2,8 @@
 
 > 协议基线：[Kodo API 概览](https://developer.qiniu.com/kodo/3939/overview-of-the-api)
 > 参考实现：`qiniu/java-sdk@v7.19.0`（2025-06-20）；交叉核对 Python `v7.18.2`（2026-07-21）、Go `storagev2` 64 个 endpoint 包
-> 本仓版本：`mldong/moon-kodo@0.2.0`
-> 当前公开面：37 个 `Client::` 方法（0.2.0），另有令牌/签名/区域探测件
+> 本仓版本：`mldong/moon-kodo@0.3.0`
+> 当前公开面：47 个 `Client::` 方法（0.3.0），另有令牌/签名/区域探测件
 > 状态：规划骨架；现有行先记 `已实现`，真桶证据待按基线逐行复核
 
 ## 1. 当前公开面
@@ -43,14 +43,14 @@
 | KODO-BKT-001 | `buckets` / `mkbucketv3` / `drop` | `buckets` `create_bucket` `delete_bucket` | P1 | 部分真桶 | `kodo/bucket_admin_ops_wbtest.mbt`、`kodo/live_resource_test.mbt`（buckets 2026-10-22 真桶绿；建/删桶未跑） |
 | KODO-BKT-002 | 域名列表 | `domains` | P1 | 真桶已验证 | `kodo/bucket_domain_ops_wbtest.mbt`、`kodo/live_resource_test.mbt`（2026-10-22 真桶返回 1 个域名） |
 | KODO-BKT-007 | `getBucketInfo` | `bucket_info` | P1 | 真桶已验证 | `kodo/bucket_config_ops_wbtest.mbt`、`kodo/live_resource_test.mbt`（2026-10-22 真桶 region=z2/private=0） |
-| KODO-BKT-003 | `private`（桶访问权限） | — | P1 | 未开始 | 与对象 ACL 分开 |
+| KODO-BKT-003 | `private`（桶访问权限） | `set_bucket_private` | P1 | 部分真桶 | 写只落离线件（一开即整桶鉴权，绝不在配置桶真写） |
 | KODO-BKT-008 | CORS | `cors_rules` `set_cors_rules` | P1 | 部分真桶 | 读 2026-10-22 真桶绿（空规则）；写只落离线件 |
 | KODO-BKT-009 | 生命周期 | `lifecycle_rules` `add_lifecycle_rule` `update_lifecycle_rule` `delete_lifecycle_rule` | P1 | 部分真桶 | 读真桶返回 1 条（name=moon、prefix=moonfs-、delete_after_days=1）；写只落离线件 |
 | KODO-BKT-010 | 配额 | `bucket_quota` `set_bucket_quota` | P1 | 部分真桶 | 读真桶 size=-1（无限额）；写只落离线件 |
-| KODO-BKT-011 | 事件通知 | `event_rules` | P1 | 部分真桶 | 读真桶 0 条；写侧 add/update/delete 未做 |
-| KODO-BKT-004 | referer 防盗链 | — | P1 | 未开始 | 桶配置族 |
+| KODO-BKT-011 | 事件通知 | `event_rules` `add_event_rule` `update_event_rule` `delete_event_rule` | P1 | 部分真桶 | 读真桶 0 条；写侧只落离线件 |
+| KODO-BKT-004 | referer 防盗链 | `set_refer_anti_leech` | P1 | 部分真桶 | 官方只有写口；离线件已落 |
 | KODO-BKT-005 | 桶标签 tagging | — | P1 | 未开始 | 配额与事件已拆到 010/011 |
-| KODO-BKT-006 | image/style / indexPage / accessMode / maxAge / remark | — | P1 | 未开始 | 桶级长尾配置 |
+| KODO-BKT-006 | image / indexPage / accessMode / maxAge | `set_bucket_image` `unset_bucket_image` `set_index_page` `set_bucket_access_style` `set_bucket_max_age` | P1 | 部分真桶 | 全部只有离线条；remark/style 仍未做 |
 | KODO-OBJ-010 | asyncFetch / checkAsyncFetch / prefetch | — | P1 | 未开始 | 异步抓取与预取 |
 | KODO-OBJ-011 | `avinfo` | — | P1 | 未开始 | 音视频元信息 |
 

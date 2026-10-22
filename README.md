@@ -87,7 +87,7 @@ moon add mldong/moon-kodo
 | 桶管理 | `buckets` `create_bucket` `delete_bucket` | 部分实现（建/删未跑真桶） |
 | 域名列表 | `domains` | 已实现 |
 | 桶配置读 | `bucket_info` `cors_rules` `lifecycle_rules` `bucket_quota` `event_rules` | 已实现 |
-| 桶配置写 | `set_cors_rules` `set_bucket_quota` `add/update/delete_lifecycle_rule` | 部分实现（只有离线件） |
+| 桶配置写 | `set_cors_rules` `set_bucket_quota` `add/update/delete_lifecycle_rule`、防盗链／maxAge／私有属性／原图保护／首页／镜像回源／事件通知 | 部分实现（只有离线件） |
 | 分块上传第一代（`mkfile`） | 无对应件 | 待开发 |
 | `fetch` 拉取的任务态轮询 | 有 `fetch_path` 请求件，无 pfop/jobctrl 那一圈 | 待开发 |
 | 图片样式／原图保护／referer | 无对应件 | 待开发 |
