@@ -2,8 +2,8 @@
 
 > 协议基线：[Kodo API 概览](https://developer.qiniu.com/kodo/3939/overview-of-the-api)
 > 参考实现：`qiniu/java-sdk@v7.19.0`（2025-06-20）；交叉核对 Python `v7.18.2`（2026-07-21）、Go `storagev2` 64 个 endpoint 包
-> 本仓版本：`mldong/moon-kodo@0.3.0`
-> 当前公开面：47 个 `Client::` 方法（0.3.0），另有令牌/签名/区域探测件
+> 本仓版本：`mldong/moon-kodo@0.4.0`
+> 当前公开面：47 个 `Client::` 方法（0.4.0），另有令牌/签名/区域探测件
 > 状态：规划骨架；现有行先记 `已实现`，真桶证据待按基线逐行复核
 
 ## 1. 当前公开面
