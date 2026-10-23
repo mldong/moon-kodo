@@ -2,8 +2,8 @@
 
 > 协议基线：[Kodo API 概览](https://developer.qiniu.com/kodo/3939/overview-of-the-api)
 > 参考实现：`qiniu/java-sdk@v7.19.0`（2025-06-20）；交叉核对 Python `v7.18.2`（2026-07-21）、Go `storagev2` 64 个 endpoint 包
-> 本仓版本：`mldong/moon-kodo@0.13.0`
-> 当前公开面：51 个 `Client::` 方法（0.13.0），另有令牌/签名/区域探测件
+> 本仓版本：`mldong/moon-kodo@0.14.0`
+> 当前公开面：51 个 `Client::` 方法（0.14.0），另有令牌/签名/区域探测件
 > 状态：规划骨架；现有行先记 `已实现`，真桶证据待按基线逐行复核
 
 ## 1. 当前公开面
@@ -33,8 +33,8 @@
 |---|---|---|---|---|
 | KODO-UPL-002 | 表单上传完整策略：returnBody/callback/saveKey/fsizeLimit/mimeLimit/detectMime/fileType/trafficLimit | `put_bytes` / `begin_multipart` / `resume_multipart` 的 `policy~` 透传 | 已实现 | 策略串走 `UploadPolicy` 白名单；表单字段由 `extra_fields` 给；高层便捷封装未做 |
 | KODO-LST-002 | List V2（流式，`/v2/list`） | — | 不纳入 | 官方 `listV2`/`listFilesV2` 已标 `@Deprecated`，推荐 V1 `/list`；本仓走的就是 V1 |
-| KODO-MPU-002 | 分片 V1（`mkblk`/`bput`/`mkfile`） | — | 未开始 | 兼容路径；官方默认已强制 V2 |
-| KODO-OBJ-007 | 条件请求 / 校验和 | — | 未开始 | 按官方能力面复核后落地 |
+| KODO-MPU-002 | 分片 V1（`mkblk`/`bput`/`mkfile`） | — | 不纳入 | 官方 Java 7.19 基线已无 V1 方法（仅 V2） |
+| KODO-OBJ-007 | 条件请求 / 校验和 | — | 不纳入 | 官方 Java 基线无对应请求头/入口 |
 
 ### P1 · 控制面与厂商数据面扩展
 
