@@ -10,6 +10,8 @@ import {
 }
 
 // Values
+pub fn async_fetch_body(String, String, String, md5? : String, etag? : String) -> String
+
 pub fn block_md5_hex(Bytes) -> String
 
 pub fn bool_segment(Bool) -> String
@@ -68,6 +70,8 @@ pub fn move_path(String, String, String, String, Bool) -> String
 
 pub fn parse_uc_result(String) -> UcQueryResult raise @error.KodoError
 
+pub fn prefetch_path(String, String) -> String
+
 pub fn qetag(Bytes) -> String
 
 pub async fn query_region(&@http.Transport, String, String, uc_hosts? : Array[String]?) -> RegionProbe raise @error.KodoError
@@ -87,6 +91,11 @@ pub fn v2_key_segment(String) -> String
 // Errors
 
 // Types and methods
+pub(all) struct AsyncFetchResult {
+  id : String?
+  body : String
+}
+
 pub(all) struct BatchCopy {
   from_bucket : String?
   from_key : String
@@ -166,6 +175,7 @@ pub struct Client {
 pub async fn Client::abort_multipart(Self, UploadSession) -> Unit raise @error.KodoError
 pub async fn Client::add_event_rule(Self, EventRule, bucket? : String?) -> Unit raise @error.KodoError
 pub async fn Client::add_lifecycle_rule(Self, LifecycleRule, bucket? : String?) -> Unit raise @error.KodoError
+pub async fn Client::async_fetch(Self, String, String, bucket? : String?, md5? : String, etag? : String) -> AsyncFetchResult raise @error.KodoError
 pub async fn Client::batch(Self, Array[BatchOp]) -> BatchResult raise @error.KodoError
 pub async fn Client::begin_multipart(Self, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
 pub fn Client::bucket(Self) -> String
@@ -175,6 +185,7 @@ pub async fn Client::buckets(Self) -> BucketList raise @error.KodoError
 pub async fn Client::change_mime(Self, String, String) -> Unit raise @error.KodoError
 pub async fn Client::change_status(Self, String, ObjectStatus) -> Unit raise @error.KodoError
 pub async fn Client::change_type(Self, String, StorageType) -> Unit raise @error.KodoError
+pub async fn Client::check_async_fetch(Self, String) -> String raise @error.KodoError
 pub async fn Client::complete_multipart(Self, UploadSession, Array[PartInfo], mime_type? : String?, filename? : String?, custom_vars? : Array[(String, String)], meta? : Array[(String, String)]) -> FormUploadResult raise @error.KodoError
 pub async fn Client::copy(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
 pub async fn Client::cors_rules(Self, bucket? : String?) -> CorsRules raise @error.KodoError
@@ -193,6 +204,7 @@ pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int32
 pub async fn Client::move_object(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError
 pub fn Client::new(&@http.Transport, @auth.Auth, @config.Config, String) -> Self raise @error.KodoError
 pub async fn Client::open_url(Self, String) -> @http.Response raise @error.KodoError
+pub async fn Client::prefetch(Self, String, bucket? : String?) -> Unit raise @error.KodoError
 pub fn Client::private_download_url(Self, String, expires? : Int64) -> String
 pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)], policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
 pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64, policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError

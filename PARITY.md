@@ -2,8 +2,8 @@
 
 > 协议基线：[Kodo API 概览](https://developer.qiniu.com/kodo/3939/overview-of-the-api)
 > 参考实现：`qiniu/java-sdk@v7.19.0`（2025-06-20）；交叉核对 Python `v7.18.2`（2026-07-21）、Go `storagev2` 64 个 endpoint 包
-> 本仓版本：`mldong/moon-kodo@0.6.0`
-> 当前公开面：47 个 `Client::` 方法（0.6.0），另有令牌/签名/区域探测件
+> 本仓版本：`mldong/moon-kodo@0.7.0`
+> 当前公开面：50 个 `Client::` 方法（0.7.0），另有令牌/签名/区域探测件
 > 状态：规划骨架；现有行先记 `已实现`，真桶证据待按基线逐行复核
 
 ## 1. 当前公开面
@@ -51,8 +51,8 @@
 | KODO-BKT-004 | referer 防盗链 | `set_refer_anti_leech` | P1 | 部分真桶 | 官方只有写口；离线件已落 |
 | KODO-BKT-005 | 桶标签 tagging | — | P1 | 未开始 | 配额与事件已拆到 010/011 |
 | KODO-BKT-006 | image / indexPage / accessMode / maxAge | `set_bucket_image` `unset_bucket_image` `set_index_page` `set_bucket_access_style` `set_bucket_max_age` | P1 | 部分真桶 | 全部只有离线条；remark/style 仍未做 |
-| KODO-OBJ-010 | asyncFetch / checkAsyncFetch / prefetch | — | P1 | 未开始 | 异步抓取与预取 |
-| KODO-OBJ-011 | `avinfo` | — | P1 | 未开始 | 音视频元信息 |
+| KODO-OBJ-010 | asyncFetch / checkAsyncFetch / prefetch | `async_fetch` `check_async_fetch` `prefetch` | P1 | 部分真桶 | 三件都会触发服务端真实动作，只落离线件；真桶需显式开关 |
+| KODO-OBJ-011 | `avinfo` | — | P1 | 不纳入 | 官方 Java 基线无 avinfo 方法 |
 
 ### P2 · 便利/安全层
 
