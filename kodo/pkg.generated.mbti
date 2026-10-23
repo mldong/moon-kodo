@@ -208,7 +208,7 @@ pub async fn Client::open_url(Self, String) -> @http.Response raise @error.KodoE
 pub async fn Client::prefetch(Self, String, bucket? : String?) -> Unit raise @error.KodoError
 pub fn Client::private_download_url(Self, String, expires? : Int64) -> String
 pub async fn Client::put_bytes(Self, String, Bytes, mime? : String?, filename? : String?, check_crc? : Bool, expires? : Int64, extra_fields? : Array[(String, String)], meta? : Array[(String, String)], policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
-pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64, policy? : @auth.UploadPolicy?) -> FormUploadResult raise @error.KodoError
+pub async fn Client::put_bytes_multipart(Self, String, Bytes, block_size? : Int32, check_crc? : Bool, mime_type? : String?, expires? : Int64, policy? : @auth.UploadPolicy?, progress? : ((Int32, Int32) -> Unit)?) -> FormUploadResult raise @error.KodoError
 pub async fn Client::restore_archive(Self, String, Int32) -> Unit raise @error.KodoError
 pub fn Client::resume_multipart(Self, String, String, expires? : Int64, policy? : @auth.UploadPolicy?) -> UploadSession raise @error.KodoError
 pub async fn Client::set_bucket_access_style(Self, Bool, bucket? : String?) -> Unit raise @error.KodoError

@@ -508,6 +508,7 @@ pub async fn Client::put_bytes_multipart(
   mime_type~ : String? = None,
   expires~ : Int64 = 3600,
   policy~ : @auth.UploadPolicy? = None,
+  progress~ : ((Int32, Int32) -> Unit)? = None,
 ) -> FormUploadResult raise @error.KodoError {
   let session = self.begin_multipart(key, expires~, policy~)
   let ranges = split_blocks(data.length(), block_size)
@@ -518,6 +519,10 @@ pub async fn Client::put_bytes_multipart(
     let view = data[range.0:range.0 + range.1]
     let slice = view.to_owned()
     let one = self.upload_part(session, index + 1, slice, check_crc~)
+    match progress {
+      Some(report) => report(range.0 + range.1, data.length())
+      None => ()
+    }
     parts.push(PartInfo::{
       part_number: one.part_number,
       etag: one.etag,

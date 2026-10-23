@@ -288,11 +288,13 @@ async test "真桶 V2 分块：abort 丢掉会话，高层入口按块切两片�
 
       // ② 高层入口：split_blocks 把 1MiB+1 切成两片，check_crc 全程开着
       let high_key = "moonfs-kodo-" + day + "/" + stamp + "-multipart-high.bin"
+      let seen : Array[Int32] = []
       let done = client.put_bytes_multipart(
         high_key,
         mp_payload(),
         block_size=1048576,
         check_crc=true,
+        progress=Some(fn(sent, _total) { seen.push(sent) }),
       ) catch {
         err => fail("put_bytes_multipart: " + err.text())
       }
