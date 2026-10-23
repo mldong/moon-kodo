@@ -165,3 +165,41 @@ async test "真桶·chstatus/chtype/deleteAfterDays：自命名前缀，测完�
     }
   }
 }
+
+///|
+async test "真桶·翻页器：按前缀把所有对象翻完" {
+  match read_kodo_live() {
+    None => res_skip()
+    Some(live) => {
+      let client = mp_client(live) catch { err => fail("setup: " + err.text()) }
+      let root = "moonfs-kodo-pager-" + @date.now_millis().to_string() + "/"
+      let keys = [root + "a.txt", root + "b.txt", root + "c.txt"]
+      for key in keys {
+        let _ = client.put_bytes(key, @utf8.encode("pager")) catch {
+          err => fail("put: " + err.text())
+        }
+      }
+      let listing = client.list_all_files(prefix=Some(root), limit=Some(1)) catch {
+        err => fail("list all: " + err.text())
+      }
+      let mut seen = 0
+      for item in listing.items {
+        if item.key.has_prefix(root) {
+          seen = seen + 1
+        }
+      }
+      println("kodo pager seen=" + seen.to_string())
+      for key in keys {
+        let _ = client.delete(key) catch {
+          err => {
+            println("cleanup " + key + ": " + err.text())
+            false
+          }
+        }
+      }
+      if seen != keys.length() {
+        fail("pager missed objects: " + seen.to_string())
+      }
+    }
+  }
+}

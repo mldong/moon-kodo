@@ -199,6 +199,7 @@ pub async fn Client::domains(Self, bucket? : String?) -> BucketDomains raise @er
 pub async fn Client::event_rules(Self, bucket? : String?) -> EventRules raise @error.KodoError
 pub async fn Client::fetch(Self, String, String) -> FetchResult raise @error.KodoError
 pub async fn Client::lifecycle_rules(Self, bucket? : String?) -> LifecycleRules raise @error.KodoError
+pub async fn Client::list_all_files(Self, prefix? : String?, delimiter? : String?, limit? : Int32?, max_pages? : Int32) -> FileListing raise @error.KodoError
 pub async fn Client::list_files(Self, prefix? : String?, marker? : String?, delimiter? : String?, limit? : Int32?) -> FileListing raise @error.KodoError
 pub async fn Client::list_parts(Self, UploadSession, part_number_marker? : Int32?, max_parts? : Int32?) -> PartPage raise @error.KodoError
 pub async fn Client::move_object(Self, String, String, from_bucket? : String?, to_bucket? : String?, force? : Bool) -> Unit raise @error.KodoError

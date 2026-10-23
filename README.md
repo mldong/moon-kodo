@@ -75,7 +75,7 @@ moon add mldong/moon-kodo
 | 手动分片五步（第二代 `/blocks`） | 六个件，见下注 | 已实现 |
 | 存在 / 取回 / 删除 | `stat` `open_url` `delete` | 已实现 |
 | 同平台复制 / 移动 | `copy` `move_object` | 已实现 |
-| 单层列举 | `list_files`（`rsf` 的 `/list`；官方已把 `/v2/list` 标废弃） | 已实现 |
+| 单层列举／翻页 | `list_files`、`list_all_files`（自动翻到底；官方已把 `/v2/list` 标废弃） | 已实现 |
 | 预签名下载 | `Auth::private_download_url`（官方只签 GET） | 已实现 |
 | 前端直传的凭据 | `Auth::upload_token`——PUT 那一格由令牌承担，不是预签名 URL | 不适用 |
 | 用户元数据 | `stat_user_metadata` ＋ `change_mime` | 已实现 |

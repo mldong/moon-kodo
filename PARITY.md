@@ -2,8 +2,8 @@
 
 > 协议基线：[Kodo API 概览](https://developer.qiniu.com/kodo/3939/overview-of-the-api)
 > 参考实现：`qiniu/java-sdk@v7.19.0`（2025-06-20）；交叉核对 Python `v7.18.2`（2026-07-21）、Go `storagev2` 64 个 endpoint 包
-> 本仓版本：`mldong/moon-kodo@0.11.0`
-> 当前公开面：50 个 `Client::` 方法（0.11.0），另有令牌/签名/区域探测件
+> 本仓版本：`mldong/moon-kodo@0.13.0`
+> 当前公开面：51 个 `Client::` 方法（0.13.0），另有令牌/签名/区域探测件
 > 状态：规划骨架；现有行先记 `已实现`，真桶证据待按基线逐行复核
 
 ## 1. 当前公开面
@@ -50,7 +50,7 @@
 | KODO-BKT-011 | 事件通知 | `event_rules` `add_event_rule` `update_event_rule` `delete_event_rule` | P1 | 部分真桶 | 读真桶 0 条；写侧只落离线件 |
 | KODO-BKT-004 | referer 防盗链 | `set_refer_anti_leech` | P1 | 部分真桶 | 官方只有写口；离线件已落 |
 | KODO-BKT-005 | 桶标签 tagging | — | P1 | 不纳入 | 官方 Java 基线无桶标签方法 |
-| KODO-BKT-006 | image / indexPage / accessMode / maxAge | `set_bucket_image` `unset_bucket_image` `set_index_page` `set_bucket_access_style` `set_bucket_max_age` | P1 | 部分真桶 | 全部只有离线条；remark/style 仍未做 |
+| KODO-BKT-006 | image / indexPage / accessMode / maxAge | `set_bucket_image` `unset_bucket_image` `set_index_page` `set_bucket_access_style` `set_bucket_max_age` | P1 | 部分真桶 | 全部只有离线条；remark/style 官方 Java 基线无对应方法，不纳入 |
 | KODO-OBJ-010 | asyncFetch / checkAsyncFetch / prefetch | `async_fetch` `check_async_fetch` `prefetch` | P1 | 部分真桶 | 三件都会触发服务端真实动作，只落离线件；真桶需显式开关 |
 | KODO-OBJ-011 | `avinfo` | — | P1 | 不纳入 | 官方 Java 基线无 avinfo 方法 |
 
@@ -61,7 +61,7 @@
 | KODO-SEC-001 | UploadToken 完整策略面（insertOnly/callback/persistentOps/...） | 未开始 | 令牌已有基础 scope/deadline |
 | KODO-SEC-002 | 回调校验（`isValidCallback`） | 未开始 | 官方已标废弃，按基线确认是否纳入 |
 | KODO-CNV-001 | 断点记录 / 进度回调 / TransferManager | 未开始 | 高层 helper |
-| KODO-CNV-002 | 重试策略 / 分页器 / 错误映射 | 未开始 | 现有重发档已有基础 |
+| KODO-CNV-002 | 重试策略 / 分页器 / 错误映射 | 部分实现 | `list_all_files` 翻页器已落并真桶绿；进度回调/断点续传未做 |
 
 ### P3 · 可选模块
 
