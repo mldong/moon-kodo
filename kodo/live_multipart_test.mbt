@@ -379,10 +379,16 @@ async test "真桶·TransferManager 下载与跨桶搬运" {
         let _ = client.put_bytes(src, data) catch {
           err => fail("tm2 seed: " + err.text())
         }
-        let downloaded = manager.download(src) catch {
-          err => fail("tm2 download: " + err.text())
+        // CI 里绑定的 CDN 域名常解析不到；只有显式给 KODO_DOMAIN 才跑下载腿。
+        let domain = env_of("KODO_DOMAIN")
+        if domain.is_empty() {
+          println("kodo tm2 download skipped: KODO_DOMAIN not supplied")
+        } else {
+          let downloaded = manager.download(src, base_url=domain) catch {
+            err => fail("tm2 download: " + err.text())
+          }
+          assert_eq(downloaded.length(), data.length())
         }
-        assert_eq(downloaded.length(), data.length())
         manager.copy_to(src, live.bucket, dst) catch {
           err => fail("tm2 copy: " + err.text())
         }

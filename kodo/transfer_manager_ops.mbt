@@ -44,14 +44,25 @@ pub async fn TransferManager::upload(
 pub async fn TransferManager::download(
   self : TransferManager,
   key : String,
+  base_url~ : String = "",
   expires~ : Int64 = 3600,
 ) -> Bytes raise @error.KodoError {
-  // 下载 URL 要用桶绑定的域名；从 UC 现取第一条，取不到就明确拒。
-  let domains = self.client.domains(bucket=Some(self.bucket))
-  if domains.names.length() == 0 {
-    raise @error.BadParam("bucket has no bound download domain")
+  // 下载 URL 要用桶绑定的域名。调用方可显式给 `base_url~`（CI 里绑域名常解析不到）；
+  // 不给就从 UC 取第一条，取不到就明确拒。
+  let base = if !base_url.is_empty() {
+    let trimmed = if base_url.has_suffix("/") {
+      base_url[0:base_url.length() - 1].to_owned()
+    } else {
+      base_url
+    }
+    trimmed + "/" + key
+  } else {
+    let domains = self.client.domains(bucket=Some(self.bucket))
+    if domains.names.length() == 0 {
+      raise @error.BadParam("bucket has no bound download domain")
+    }
+    "https://" + domains.names[0] + "/" + key
   }
-  let base = "https://" + domains.names[0] + "/" + key
   let url = self.client.private_download_url(base, expires~)
   let response = self.client.open_url(url)
   let body = read_all(response.body)
