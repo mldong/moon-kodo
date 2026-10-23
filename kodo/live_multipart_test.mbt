@@ -316,3 +316,48 @@ async test "真桶 V2 分块：abort 丢掉会话，高层入口按块切两片�
     }
   }
 }
+
+///|
+async test "真桶·TransferManager：超阈值自动走分片" {
+  match read_kodo_live() {
+    None => res_skip()
+    Some(live) => {
+      let client = mp_client(live) catch {
+        err => fail("tm setup: " + err.text())
+      }
+      let key = "moonfs-kodo-tm-" + @date.now_millis().to_string() + "/a.bin"
+      let data = mp_payload()
+      let manager = @kodo.TransferManager::new(
+        client,
+        live.bucket,
+        block_size=1048576,
+        threshold=1048576,
+      )
+      let outcome = try {
+        let out = manager.upload(key, data) catch {
+          err => fail("tm upload: " + err.text())
+        }
+        if out.key.unwrap_or("") != key {
+          fail("tm key mismatch: " + out.key.unwrap_or("<none>"))
+        }
+        let info = client.stat(key) catch {
+          err => fail("tm stat: " + err.text())
+        }
+        assert_eq(info.fsize, Some(data.length().to_int64()))
+        "no-error"
+      } catch {
+        err => "measure: " + err.to_string()
+      }
+      let _ = client.delete(key) catch {
+        err => {
+          println("tm cleanup: " + err.text())
+          false
+        }
+      }
+      println("kodo tm outcome=" + outcome)
+      if outcome != "no-error" {
+        fail(outcome)
+      }
+    }
+  }
+}

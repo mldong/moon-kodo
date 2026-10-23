@@ -372,6 +372,16 @@ pub(all) enum StorageType {
 }
 pub fn StorageType::code(Self) -> Int32
 
+pub struct TransferManager {
+  client : Client
+  bucket : String
+  block_size : Int32
+  threshold : Int32
+  progress : ((Int32, Int32) -> Unit)?
+}
+pub fn TransferManager::new(Client, String, block_size? : Int32, threshold? : Int32, progress? : ((Int32, Int32) -> Unit)?) -> Self
+pub async fn TransferManager::upload(Self, String, Bytes) -> FormUploadResult raise @error.KodoError
+
 pub(all) struct UcGroup {
   domains : Array[String]?
   old : Array[String]?

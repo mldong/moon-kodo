@@ -87,7 +87,7 @@ moon add mldong/moon-kodo
 | 桶管理 | `buckets` `create_bucket` `delete_bucket` | 部分实现（建/删未跑真桶） |
 | 域名列表 | `domains` | 已实现 |
 | 异步抓取与预取 | `async_fetch` `check_async_fetch` `prefetch` | 部分实现（只有离线件，触发服务端动作） |
-| 上传进度回调 | `put_bytes_multipart` 的 `progress~`（按片） | 已实现 |
+| 上传进度回调／传输管理器 | `put_bytes_multipart` 的 `progress~`、`TransferManager`（上传侧） | 已实现 |
 | 桶配置读 | `bucket_info` `cors_rules` `lifecycle_rules` `bucket_quota` `event_rules` | 已实现 |
 | 桶配置写 | `set_cors_rules` `set_bucket_quota` `add/update/delete_lifecycle_rule`、防盗链／maxAge／私有属性／原图保护／首页／镜像回源／事件通知 | 部分实现（只有离线件） |
 | 分块上传第一代（`mkfile`） | 无对应件 | 待开发 |
