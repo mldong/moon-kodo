@@ -379,6 +379,8 @@ pub struct TransferManager {
   threshold : Int32
   progress : ((Int32, Int32) -> Unit)?
 }
+pub async fn TransferManager::copy_to(Self, String, String, String) -> Unit raise @error.KodoError
+pub async fn TransferManager::download(Self, String, expires? : Int64) -> Bytes raise @error.KodoError
 pub fn TransferManager::new(Client, String, block_size? : Int32, threshold? : Int32, progress? : ((Int32, Int32) -> Unit)?) -> Self
 pub async fn TransferManager::upload(Self, String, Bytes) -> FormUploadResult raise @error.KodoError
 

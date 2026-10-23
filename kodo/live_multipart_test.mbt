@@ -361,3 +361,51 @@ async test "真桶·TransferManager：超阈值自动走分片" {
     }
   }
 }
+
+///|
+async test "真桶·TransferManager 下载与跨桶搬运" {
+  match read_kodo_live() {
+    None => res_skip()
+    Some(live) => {
+      let client = mp_client(live) catch {
+        err => fail("tm2 setup: " + err.text())
+      }
+      let tag = "moonfs-kodo-tm2-" + @date.now_millis().to_string()
+      let src = tag + "/src.bin"
+      let dst = tag + "/dst.bin"
+      let data = @utf8.encode("kodo-transfer-manager-payload")
+      let manager = @kodo.TransferManager::new(client, live.bucket)
+      let outcome = try {
+        let _ = client.put_bytes(src, data) catch {
+          err => fail("tm2 seed: " + err.text())
+        }
+        let downloaded = manager.download(src) catch {
+          err => fail("tm2 download: " + err.text())
+        }
+        assert_eq(downloaded.length(), data.length())
+        manager.copy_to(src, live.bucket, dst) catch {
+          err => fail("tm2 copy: " + err.text())
+        }
+        let info = client.stat(dst) catch {
+          err => fail("tm2 stat: " + err.text())
+        }
+        assert_eq(info.fsize, Some(data.length().to_int64()))
+        "no-error"
+      } catch {
+        err => "measure: " + err.to_string()
+      }
+      for key in [src, dst] {
+        let _ = client.delete(key) catch {
+          err => {
+            println("tm2 cleanup: " + err.text())
+            false
+          }
+        }
+      }
+      println("kodo tm2 outcome=" + outcome)
+      if outcome != "no-error" {
+        fail(outcome)
+      }
+    }
+  }
+}

@@ -38,3 +38,40 @@ pub async fn TransferManager::upload(
     )
   }
 }
+
+///|
+/// 下载：签一条私有下载 URL 再取回内容（Kodo 没有独立的下载 API）。
+pub async fn TransferManager::download(
+  self : TransferManager,
+  key : String,
+  expires~ : Int64 = 3600,
+) -> Bytes raise @error.KodoError {
+  // 下载 URL 要用桶绑定的域名；从 UC 现取第一条，取不到就明确拒。
+  let domains = self.client.domains(bucket=Some(self.bucket))
+  if domains.names.length() == 0 {
+    raise @error.BadParam("bucket has no bound download domain")
+  }
+  let base = "https://" + domains.names[0] + "/" + key
+  let url = self.client.private_download_url(base, expires~)
+  let response = self.client.open_url(url)
+  let body = read_all(response.body)
+  response.body.close()
+  body
+}
+
+///|
+/// 跨桶搬运：服务端 `copy`（`/copy/<源>/<目标>/force/true`），同桶改目标键也走这一条。
+pub async fn TransferManager::copy_to(
+  self : TransferManager,
+  source_key : String,
+  dest_bucket : String,
+  dest_key : String,
+) -> Unit raise @error.KodoError {
+  self.client.copy(
+    source_key,
+    dest_key,
+    from_bucket=Some(self.bucket),
+    to_bucket=Some(dest_bucket),
+    force=true,
+  )
+}
