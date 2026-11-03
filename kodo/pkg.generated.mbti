@@ -263,6 +263,7 @@ pub(all) struct FetchResult {
   body : String
 }
 
+#derive(Eq)
 pub(all) struct FileInfo {
   key : String
   hash : String?
@@ -270,7 +271,7 @@ pub(all) struct FileInfo {
   mime_type : String?
   put_time : Int64?
   md5 : String?
-} derive(Eq)
+}
 pub fn FileInfo::equal(Self, Self) -> Bool
 pub fn FileInfo::not_equal(Self, Self) -> Bool
 
@@ -289,11 +290,12 @@ pub(all) struct FormPart {
   data : Bytes
 }
 
+#derive(Eq)
 pub(all) struct FormUploadResult {
   key : String?
   hash : String?
   body : String
-} derive(Eq)
+}
 pub fn FormUploadResult::equal(Self, Self) -> Bool
 pub fn FormUploadResult::not_equal(Self, Self) -> Bool
 
@@ -351,6 +353,7 @@ pub(all) struct RegionProbe {
   ttl : Int64?
 }
 
+#derive(Eq)
 pub(all) struct StatResult {
   fsize : Int64?
   hash : String?
@@ -358,7 +361,7 @@ pub(all) struct StatResult {
   put_time : Int64?
   user_metadata : Array[(String, String)]
   body : String
-} derive(Eq)
+}
 pub fn StatResult::equal(Self, Self) -> Bool
 pub fn StatResult::not_equal(Self, Self) -> Bool
 
@@ -384,15 +387,17 @@ pub async fn TransferManager::download(Self, String, base_url? : String, expires
 pub fn TransferManager::new(Client, String, block_size? : Int32, threshold? : Int32, progress? : ((Int32, Int32) -> Unit)?) -> Self
 pub async fn TransferManager::upload(Self, String, Bytes) -> FormUploadResult raise @error.KodoError
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct UcGroup {
   domains : Array[String]?
   old : Array[String]?
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn UcGroup::equal(Self, Self) -> Bool
-pub fn UcGroup::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcGroup::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn UcGroup::not_equal(Self, Self) -> Bool
-pub fn UcGroup::to_json(Self) -> Json
+pub fn UcGroup::to_json(Self) -> @json.Json
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct UcHostEntry {
   region : String
   up : UcGroup?
@@ -400,19 +405,20 @@ pub(all) struct UcHostEntry {
   rs : UcGroup?
   rsf : UcGroup?
   api : UcGroup?
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn UcHostEntry::equal(Self, Self) -> Bool
-pub fn UcHostEntry::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcHostEntry::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn UcHostEntry::not_equal(Self, Self) -> Bool
-pub fn UcHostEntry::to_json(Self) -> Json
+pub fn UcHostEntry::to_json(Self) -> @json.Json
 
+#derive(Eq, @json.FromJson, @json.ToJson)
 pub(all) struct UcQueryResult {
   hosts : Array[UcHostEntry]
-} derive(Eq, ToJson, @json.FromJson)
+}
 pub fn UcQueryResult::equal(Self, Self) -> Bool
-pub fn UcQueryResult::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcQueryResult::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn UcQueryResult::not_equal(Self, Self) -> Bool
-pub fn UcQueryResult::to_json(Self) -> Json
+pub fn UcQueryResult::to_json(Self) -> @json.Json
 
 pub(all) struct UploadSession {
   key : String

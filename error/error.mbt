@@ -4,15 +4,17 @@
 /// `common/QiniuException.java`）。混在一个整数里就会出"把 `-1` 当 500 处理"这种错，
 /// 所以这里分两族：`Service` 只装真 HTTP 读数，本地拒掉的走其它臂，伪码由
 /// `pseudo_code` 现给。
+#derive(Eq)
 pub(all) struct ServiceError {
   status : Int32
   /// 响应体里的 `error` 字段；读不出原文时是体的一段截断
   error : String
   /// `X-Reqid`，报障时要的那串
   req_id : String?
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 pub(all) suberror KodoError {
   BadParam(String)
   BadFile(String)
@@ -23,7 +25,7 @@ pub(all) suberror KodoError {
   /// `QiniuException(Exception)`，`code()` 落到 `-1`，与"网络断"同数。我们单列一档：
   /// 把"服务端答了但没答全"混进网络错误，会把重试策略带偏。
   BadResponse(String)
-} derive(Eq)
+}
 
 ///|
 /// 官方伪码；`Service` 那一档**没有**伪码，它的读数就是 `status`。

@@ -63,7 +63,7 @@ pub async fn Client::batch(
     )
   }
   let body_text = batch_body(self.bucket, ops)
-  let body = @utf8.encode(body_text.view())
+  let body = @utf8.encode(body_text.clamped_view())
   let response = self.batch_post(body)
   let text = read_text(response.body)
   parse_batch_result(text)
@@ -99,7 +99,7 @@ fn batch_op_path(bucket : String, op : BatchOp) -> String {
       "chgm/" +
       encoded_entry(bucket, Some(key)) +
       "/mime/" +
-      @auth.urlsafe_b64(@utf8.encode(mime.view()))
+      @auth.urlsafe_b64(@utf8.encode(mime.clamped_view()))
     ChangeType(key, storage_type) =>
       "chtype/" +
       encoded_entry(bucket, Some(key)) +

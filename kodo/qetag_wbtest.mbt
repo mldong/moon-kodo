@@ -1,6 +1,9 @@
 ///|
 test "qetag matches official small and empty vectors" {
-  assert_eq(qetag(@utf8.encode("hello".view())), "Fqr0xh3cxeii2r7eDztILNmuqUNN")
+  assert_eq(
+    qetag(@utf8.encode("hello".clamped_view())),
+    "Fqr0xh3cxeii2r7eDztILNmuqUNN",
+  )
   assert_eq(qetag(Bytes::from_array([])), "Fg==")
 }
 

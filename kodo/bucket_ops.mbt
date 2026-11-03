@@ -151,6 +151,7 @@ fn append_query_part(
 /// 一条已列出的对象。字段全做成可选：不同存储类型/桶配置回的字集不一样。
 /// 键名取自 2026-10-17 真桶现读的 `/list` 响应：`key` `hash` `fsize` `mimeType`
 /// `putTime`（17 位微秒）`md5` `type` `status`。
+#derive(Eq)
 pub(all) struct FileInfo {
   key : String
   hash : String?
@@ -158,7 +159,7 @@ pub(all) struct FileInfo {
   mime_type : String?
   put_time : Int64?
   md5 : String?
-} derive(Eq)
+}
 
 ///|
 pub extend FileInfo with Eq::{equal, not_equal}

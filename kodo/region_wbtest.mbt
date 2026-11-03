@@ -19,9 +19,10 @@ fn parse_text(text : String) -> String {
 ///|
 /// 只为证明"derive 读不进 JSON 数字"这条形状事实而存在的结构：本包的
 /// `UcHostEntry` 里没有任何数字字段，就是这个事实的结果。
+#derive(@json.FromJson)
 struct NumberProbe {
   ttl : Int64?
-} derive(@json.FromJson)
+}
 
 ///|
 pub extend NumberProbe with @json.FromJson::{from_json}

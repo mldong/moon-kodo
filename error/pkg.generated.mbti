@@ -25,6 +25,7 @@ pub fn json_string_pairs(String) -> Array[(String, String)]
 pub fn service_error(Int32, String, String?) -> ServiceError
 
 // Errors
+#derive(Eq)
 pub(all) suberror KodoError {
   BadParam(String)
   BadFile(String)
@@ -32,7 +33,7 @@ pub(all) suberror KodoError {
   Network(String)
   Service(ServiceError)
   BadResponse(String)
-} derive(Eq)
+}
 pub fn KodoError::equal(Self, Self) -> Bool
 pub fn KodoError::is_not_found(Self) -> Bool
 pub fn KodoError::not_equal(Self, Self) -> Bool
@@ -40,11 +41,12 @@ pub fn KodoError::pseudo_code(Self) -> Int32?
 pub fn KodoError::text(Self) -> String
 
 // Types and methods
+#derive(Eq)
 pub(all) struct ServiceError {
   status : Int32
   error : String
   req_id : String?
-} derive(Eq)
+}
 pub fn ServiceError::equal(Self, Self) -> Bool
 pub fn ServiceError::not_equal(Self, Self) -> Bool
 

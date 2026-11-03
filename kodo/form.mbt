@@ -7,11 +7,12 @@
 ///|
 /// 一次表单上传的成功读数。Kodo 回 `{"key":...,"hash":...}`；令牌里配了 `returnBody`
 /// 时字段集换成调用方自己的，所以 `body` 原样留着。
+#derive(Eq)
 pub(all) struct FormUploadResult {
   key : String?
   hash : String?
   body : String
-} derive(Eq)
+}
 
 ///|
 pub extend FormUploadResult with Eq::{equal, not_equal}

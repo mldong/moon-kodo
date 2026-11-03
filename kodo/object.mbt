@@ -10,6 +10,7 @@
 /// `user_metadata` 是 `x-qn-meta` 那一份：2026-10-17 真桶现读，写侧走平铺字段
 /// `x-qn-meta-case`，读侧回成**嵌套对象** `"x-qn-meta":{"case":"…"}`，两侧形状不同；
 /// 没有这一族时回空表（不是"读失败"）。
+#derive(Eq)
 pub(all) struct StatResult {
   fsize : Int64?
   hash : String?
@@ -17,7 +18,7 @@ pub(all) struct StatResult {
   put_time : Int64?
   user_metadata : Array[(String, String)]
   body : String
-} derive(Eq)
+}
 
 ///|
 pub extend StatResult with Eq::{equal, not_equal}

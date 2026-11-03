@@ -8,12 +8,14 @@
 /// `kodo-config.qiniuapi.com` → `uc.qbox.me`，官方 `Configuration.java:33`）。
 
 ///|
+#derive(@json.FromJson, @json.ToJson, Eq)
 pub(all) struct UcGroup {
   domains : Array[String]?
   old : Array[String]?
-} derive(@json.FromJson, @json.ToJson, Eq)
+}
 
 ///|
+#derive(@json.FromJson, @json.ToJson, Eq)
 pub(all) struct UcHostEntry {
   region : String
   up : UcGroup?
@@ -21,12 +23,13 @@ pub(all) struct UcHostEntry {
   rs : UcGroup?
   rsf : UcGroup?
   api : UcGroup?
-} derive(@json.FromJson, @json.ToJson, Eq)
+}
 
 ///|
+#derive(@json.FromJson, @json.ToJson, Eq)
 pub(all) struct UcQueryResult {
   hosts : Array[UcHostEntry]
-} derive(@json.FromJson, @json.ToJson, Eq)
+}
 
 ///|
 pub extend UcGroup with @json.FromJson::{from_json}
