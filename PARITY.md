@@ -58,10 +58,10 @@
 
 | ID | 能力 | 状态 | 备注 |
 |---|---|---|---|
-| KODO-SEC-001 | UploadToken 完整策略面（insertOnly/callback/persistentOps/...） | 未开始 | 令牌已有基础 scope/deadline |
+| KODO-SEC-001 | UploadToken 完整策略面（insertOnly/callback/persistentOps/...） | 已实现 | `auth/policy.mbt` 按官方 `Auth.policyFields` 26 项建白名单，调用方 `UploadPolicy::put` 逐项追加，strict 档拒白名单外的键（测试「签名族 #6 / #6b」）；保留键 `scope`/`deadline` 由签名层拼 |
 | KODO-SEC-002 | 回调校验（`isValidCallback`） | 未开始 | 官方已标废弃，按基线确认是否纳入 |
-| KODO-CNV-001 | 断点记录 / 进度回调 / TransferManager | 未开始 | 高层 helper |
-| KODO-CNV-002 | 重试策略 / 分页器 / 错误映射 | 部分实现 | `list_all_files` 翻页器真桶绿；`TransferManager` 上传/下载/跨桶复制真桶绿；续传走既有 `resume_multipart` |
+| KODO-CNV-001 | 断点记录 / 进度回调 / TransferManager | 已实现 | `TransferManager`（小于阈值走表单、超阈值走分片并透传 `progress~`，另有下载与跨桶复制）真桶绿（`live_multipart_test.mbt`「真桶·TransferManager…」两腿）；会话续传本就在 `begin_multipart`/`resume_multipart` 层，管理器不另存 uploadId |
+| KODO-CNV-002 | 重试策略 / 分页器 / 错误映射 | 部分实现 | `list_all_files` 翻页器真桶绿；`TransferManager` 上传/下载/跨桶复制真桶绿；续传走既有 `resume_multipart`；请求层重发固定一次（仅可倒带身体，`retry_test.mbt`），暂无可配次数/退避 |
 
 ### P3 · 可选模块
 
