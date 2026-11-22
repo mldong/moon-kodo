@@ -393,7 +393,7 @@ pub(all) struct UcGroup {
   old : Array[String]?
 }
 pub fn UcGroup::equal(Self, Self) -> Bool
-pub fn UcGroup::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcGroup::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn UcGroup::not_equal(Self, Self) -> Bool
 pub fn UcGroup::to_json(Self) -> @json.Json
 
@@ -407,7 +407,7 @@ pub(all) struct UcHostEntry {
   api : UcGroup?
 }
 pub fn UcHostEntry::equal(Self, Self) -> Bool
-pub fn UcHostEntry::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcHostEntry::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn UcHostEntry::not_equal(Self, Self) -> Bool
 pub fn UcHostEntry::to_json(Self) -> @json.Json
 
@@ -416,7 +416,7 @@ pub(all) struct UcQueryResult {
   hosts : Array[UcHostEntry]
 }
 pub fn UcQueryResult::equal(Self, Self) -> Bool
-pub fn UcQueryResult::from_json(@json.Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
+pub fn UcQueryResult::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
 pub fn UcQueryResult::not_equal(Self, Self) -> Bool
 pub fn UcQueryResult::to_json(Self) -> @json.Json
 

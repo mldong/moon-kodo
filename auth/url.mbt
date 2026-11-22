@@ -100,7 +100,7 @@ fn parse_hex_byte(pair : String) -> Byte? {
   if pair.length() != 2 {
     None
   } else {
-    let value = @string.parse_int(pair, base=16) catch { _ => -1 }
+    let value = @string.parse_int(pair, radix=16) catch { _ => -1 }
     if value >= 0 && value <= 255 {
       Some(value.to_byte())
     } else {
